@@ -40,7 +40,8 @@ self.addEventListener('fetch', (evento) => {
 async function buscar(request) {
   const cache = await caches.open(CACHE);
   try {
-    const resposta = await comPrazo(fetch(request), 3000);
+    // no-cache: confere com o servidor em vez de usar a cópia de 10 min do navegador
+    const resposta = await comPrazo(fetch(request, { cache: 'no-cache' }), 3000);
     if (resposta.ok) cache.put(request, resposta.clone());
     return resposta;
   } catch {
