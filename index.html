@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Preço 3D</title>
+  <meta name="description" content="Calculadora de preço de venda para peças impressas em 3D">
+  <meta name="theme-color" content="#f6f4fb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#110f17" media="(prefers-color-scheme: dark)">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Preço 3D">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icones/icone.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icones/apple-touch-icon.png">
+  <link rel="stylesheet" href="estilo.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="topo">
+    <a class="topo-voltar" href="#" data-so-ajustes hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      Voltar
+    </a>
+    <h1 class="topo-titulo">
+      <span data-so-calculadora>Preço 3D</span>
+      <span data-so-ajustes hidden>Ajustes</span>
+    </h1>
+    <a class="topo-botao" href="#ajustes" data-so-calculadora aria-label="Ajustes">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>
+      </svg>
+    </a>
+  </header>
+
+  <!-- ===================== Calculadora ===================== -->
+  <main id="tela-calculadora" class="tela">
+    <section class="cartao">
+      <h2>Sua peça</h2>
+
+      <div class="campo">
+        <label for="peso">Peso da impressão</label>
+        <div class="entrada">
+          <input id="peso" inputmode="decimal" autocomplete="off" placeholder="0" aria-describedby="peso-erro">
+          <span class="sufixo">gramas</span>
+        </div>
+        <p class="erro" id="peso-erro" role="alert"></p>
+      </div>
+
+      <fieldset class="campo">
+        <legend>Tempo de impressão</legend>
+        <div class="linha-tempo">
+          <div class="entrada">
+            <input id="horas" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="Horas">
+            <span class="sufixo">h</span>
+          </div>
+          <div class="entrada">
+            <input id="minutos" inputmode="numeric" autocomplete="off" placeholder="0" aria-label="Minutos">
+            <span class="sufixo">min</span>
+          </div>
+        </div>
+        <p class="dica" id="tempo-dica"></p>
+        <p class="erro" id="tempo-erro" role="alert"></p>
+      </fieldset>
+
+      <fieldset class="campo">
+        <legend>Quantas cores?</legend>
+        <div class="cores">
+          <label><input type="radio" name="cores" value="1" checked><span><span class="pontos" aria-hidden="true"><b></b></span>1 cor</span></label>
+          <label><input type="radio" name="cores" value="2"><span><span class="pontos" aria-hidden="true"><b></b><b></b></span>2 cores</span></label>
+          <label><input type="radio" name="cores" value="3"><span><span class="pontos" aria-hidden="true"><b></b><b></b><b></b></span>3 cores</span></label>
+          <label><input type="radio" name="cores" value="4"><span><span class="pontos" aria-hidden="true"><b></b><b></b><b></b><b></b></span>4 cores</span></label>
+        </div>
+      </fieldset>
+    </section>
+
+    <section class="cartao">
+      <h2>Acessórios</h2>
+      <label class="interruptor">
+        <span class="interruptor-texto">Clicker <small id="clicker-custo"></small></span>
+        <input type="checkbox" id="usa-clicker" role="switch">
+      </label>
+      <label class="interruptor">
+        <span class="interruptor-texto">Correntinha <small id="correntinha-custo"></small></span>
+        <input type="checkbox" id="usa-correntinha" role="switch">
+      </label>
+    </section>
+
+    <section class="cartao">
+      <div class="lucro-topo">
+        <h2><label for="lucro">Lucro</label></h2>
+        <div class="entrada entrada-curta">
+          <input id="lucro" inputmode="numeric" autocomplete="off" value="50" aria-describedby="lucro-erro">
+          <span class="sufixo">%</span>
+        </div>
+      </div>
+      <input type="range" id="lucro-faixa" min="0" max="200" step="5" value="50" aria-label="Lucro em porcentagem">
+      <p class="dica">Quanto você ganha em cima do que gastou.</p>
+      <p class="erro" id="lucro-erro" role="alert"></p>
+    </section>
+
+    <section class="cartao resultado" id="resultado" aria-live="polite">
+      <p class="vazio" id="resultado-vazio">Preencha o peso e o tempo para ver o preço.</p>
+
+      <div id="resultado-conta" hidden>
+        <p class="preco-rotulo">Preço de venda</p>
+        <p class="preco" id="preco"></p>
+
+        <p class="sub-rotulo">Para onde vai o dinheiro</p>
+        <div class="barra" id="barra" role="img"></div>
+        <ul class="legenda" id="legenda"></ul>
+
+        <details class="conta">
+          <summary>Ver a conta passo a passo</summary>
+          <dl id="passos"></dl>
+        </details>
+
+        <p class="moral">O custo paga o filamento, a impressora e os acessórios. O lucro é o que sobra para você.</p>
+
+        <button type="button" class="botao" id="compartilhar">Compartilhar orçamento</button>
+        <p class="dica centro" id="compartilhar-aviso" role="status"></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== Ajustes ===================== -->
+  <main id="tela-ajustes" class="tela" hidden>
+    <section class="cartao">
+      <h2>Filamento</h2>
+      <div class="campo">
+        <label for="aj-preco-rolo">Preço do rolo de 1 kg</label>
+        <div class="entrada">
+          <span class="prefixo">R$</span>
+          <input id="aj-preco-rolo" inputmode="decimal" autocomplete="off" data-ajuste="precoRolo" data-casas="2">
+        </div>
+        <p class="erro" role="alert"></p>
+      </div>
+    </section>
+
+    <section class="cartao">
+      <h2>Impressora</h2>
+      <div class="campo">
+        <label for="aj-preco-impressora">Preço da impressora</label>
+        <div class="entrada">
+          <span class="prefixo">R$</span>
+          <input id="aj-preco-impressora" inputmode="decimal" autocomplete="off" data-ajuste="precoImpressora" data-casas="2">
+        </div>
+        <p class="erro" role="alert"></p>
+      </div>
+      <div class="campo">
+        <label for="aj-vida-util">Vida útil</label>
+        <div class="entrada">
+          <input id="aj-vida-util" inputmode="numeric" autocomplete="off" data-ajuste="vidaUtilHoras" data-casas="0">
+          <span class="sufixo">horas</span>
+        </div>
+        <p class="erro" role="alert"></p>
+      </div>
+      <p class="destaque" id="aj-custo-uso"></p>
+      <p class="dica">A impressora vai se gastando com o uso. Esse valor guarda um pouquinho de cada impressão para um dia comprar outra.</p>
+    </section>
+
+    <section class="cartao">
+      <h2>Acessórios</h2>
+      <div class="campo">
+        <label for="aj-clicker">Clicker</label>
+        <div class="entrada">
+          <span class="prefixo">R$</span>
+          <input id="aj-clicker" inputmode="decimal" autocomplete="off" data-ajuste="custoClicker" data-casas="2">
+        </div>
+        <p class="erro" role="alert"></p>
+      </div>
+      <div class="campo">
+        <label for="aj-correntinha">Correntinha</label>
+        <div class="entrada">
+          <span class="prefixo">R$</span>
+          <input id="aj-correntinha" inputmode="decimal" autocomplete="off" data-ajuste="custoCorrentinha" data-casas="2">
+        </div>
+        <p class="erro" role="alert"></p>
+      </div>
+    </section>
+
+    <p class="dica centro">Os ajustes ficam guardados neste celular.</p>
+    <button type="button" class="botao botao-secundario" id="restaurar">Voltar aos valores de fábrica</button>
+  </main>
+
+  <button type="button" class="barra-preco" id="barra-preco" hidden>
+    <span>Preço de venda</span>
+    <strong id="barra-preco-valor"></strong>
+  </button>
+</body>
+</html>

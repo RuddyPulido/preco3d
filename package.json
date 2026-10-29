@@ -1,0 +1,9 @@
+{
+  "name": "preco3d",
+  "private": true,
+  "type": "module",
+  "description": "Calculadora de preço de venda para impressões 3D",
+  "scripts": {
+    "test": "node --test"
+  }
+}
