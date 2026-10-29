@@ -217,26 +217,36 @@ function desenharBarra(r) {
 
   const fatias = porcentagens(partes.map((p) => p.valor), r.precoVenda);
   for (const [i, parte] of partes.entries()) {
-    const fatia = fatias[i];
-
     const segmento = document.createElement('i');
     segmento.style.flex = `${parte.valor} 0 0`;
     segmento.style.background = `var(${parte.cor})`;
-    segmento.title = `${parte.nome}: ${formatarValor(parte.valor)} (${fatia}%)`;
+    segmento.title = `${parte.nome}: ${formatarValor(parte.valor)} (${fatias[i]}%)`;
     barra.append(segmento);
-
-    const item = document.createElement('li');
-    if (parte.lucro) item.className = 'e-lucro';
-    item.innerHTML = '<span class="amostra"></span><span class="nome"></span><span class="parte"></span><span class="valor"></span>';
-    item.querySelector('.amostra').style.background = `var(${parte.cor})`;
-    item.querySelector('.nome').textContent = parte.lucro ? 'Seu lucro' : parte.nome;
-    item.querySelector('.parte').textContent = `${fatia}%`;
-    item.querySelector('.valor').textContent = formatarValor(parte.valor);
-    legenda.append(item);
   }
+
+  const itens = partes.map((parte, i) => itemLegenda(
+    parte.lucro ? 'Seu lucro' : parte.nome, fatias[i], parte.valor, parte.cor, parte.lucro ? 'e-lucro' : ''));
+
+  // Custo total fecha a soma dos custos, logo antes do lucro
+  const fatiaCusto = partes.reduce((soma, p, i) => (p.lucro ? soma : soma + fatias[i]), 0);
+  const posicaoLucro = partes.findIndex((p) => p.lucro);
+  itens.splice(posicaoLucro < 0 ? itens.length : posicaoLucro, 0,
+    itemLegenda('Custo total', fatiaCusto, r.custoTotal, null, 'e-total'));
+  legenda.append(...itens);
 
   barra.setAttribute('aria-label',
     `Para onde vai o dinheiro: ${partes.map((p) => `${p.nome} ${formatarValor(p.valor)}`).join(', ')}`);
+}
+
+function itemLegenda(nome, fatia, valor, cor, classe) {
+  const item = document.createElement('li');
+  if (classe) item.className = classe;
+  item.innerHTML = '<span class="amostra"></span><span class="nome"></span><span class="parte"></span><span class="valor"></span>';
+  if (cor) item.querySelector('.amostra').style.background = `var(${cor})`;
+  item.querySelector('.nome').textContent = nome;
+  item.querySelector('.parte').textContent = `${fatia}%`;
+  item.querySelector('.valor').textContent = formatarValor(valor);
+  return item;
 }
 
 // Porcentagens inteiras que somam 100: quem perdeu mais no arredondamento ganha o ponto que falta
